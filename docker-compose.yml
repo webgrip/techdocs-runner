@@ -1,0 +1,21 @@
+services:
+
+  techdocs-runner-builder:
+    container_name: techdocs-runner-builder
+    image: webgrip/techdocs-builder:latest
+    pull_policy: always
+
+  techdocs-runner-techdocs:
+    container_name: techdocs-runner-techdocs
+    image: webgrip/techdocs-runner:latest
+    pull_policy: never
+    depends_on:
+      techdocs-builder-builder:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: ops/docker/techdocs/Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./docs/techdocs:/docs

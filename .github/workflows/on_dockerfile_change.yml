@@ -1,0 +1,34 @@
+name: '[Workflow] On Dockerfile Change'
+
+concurrency:
+  group: push-${{ github.branch }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ops/docker/**'
+
+jobs:
+  determine-changed-dirs:
+    name: "Builder"
+    if: >
+      always()
+    uses: webgrip/workflows/.github/workflows/determine-changed-directories.yml@main
+    with:
+      inside-dir: 'ops/docker'
+
+  build-and-push-changed-dirs:
+    name: "Build and Push"
+    needs: [ determine-changed-dirs ]
+    if: >
+      always()
+      && needs.determine-changed-dirs.outputs.changed-paths != '[]'
+    uses: ./.github/workflows/release-build-and-push.yml
+    with:
+      paths: ${{ needs.determine-changed-dirs.outputs.changed-paths }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

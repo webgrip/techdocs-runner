@@ -1,0 +1,3 @@
+# Index
+
+[Diagrams](diagrams.md)

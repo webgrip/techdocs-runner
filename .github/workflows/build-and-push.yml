@@ -1,0 +1,50 @@
+name: "[Action] Build and Push Docker Image(s)"
+
+run-name: "Build and Push Docker Image(s)"
+
+on:
+  workflow_call:
+    inputs:
+      paths:
+        description: 'List of paths in JSON array format. e.g.: ["ops/docker/${{ github.event.repository.name }}"]'
+        required: true
+        type: string
+      version:
+        description: 'Semantic version'
+        required: true
+        type: string
+    secrets:
+      DOCKER_USERNAME:
+        description: 'DockerHub username'
+        required: true
+      DOCKER_TOKEN:
+        description: 'DockerHub token'
+        required: true
+  workflow_dispatch:
+    inputs:
+      paths:
+        description: 'List of paths in JSON array format. e.g.: ["ops/docker/${{ github.event.repository.name }}"]'
+        required: true
+        type: string
+      version:
+        description: 'Semantic version'
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    name: 'Build and Push'
+    strategy:
+      fail-fast: false
+      matrix:
+        path: ${{ fromJson(inputs.paths) }}
+    uses: webgrip/workflows/.github/workflows/docker-build-and-push.yml@main
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+    with:
+      docker-context: '.'
+      docker-file: '${{ matrix.path }}/Dockerfile'
+      docker-tags: |
+        ${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ inputs.version }}
+        ${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
