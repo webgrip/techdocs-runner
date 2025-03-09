@@ -5,16 +5,16 @@ services:
     image: webgrip/techdocs-builder:latest
     pull_policy: always
 
-  techdocs-runner-techdocs:
+  techdocs-runner:
     container_name: techdocs-runner-techdocs
     image: webgrip/techdocs-runner:latest
     pull_policy: never
     depends_on:
-      techdocs-builder-builder:
+      techdocs-runner-builder:
         condition: service_completed_successfully
     build:
       context: .
-      dockerfile: ops/docker/techdocs/Dockerfile
+      dockerfile: ops/docker/techdocs-runner/Dockerfile
     ports:
       - "8001:8000"
     volumes:
