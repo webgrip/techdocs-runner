@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/webgrip/techdocs-runner/compare/1.0.0...1.0.1) (2025-03-09)
+
+
+### Bug Fixes
+
+* deploy ([c85650b](https://github.com/webgrip/techdocs-runner/commit/c85650be6a2b227f58f8baeae22b35aa9f36314c))
+
 # 1.0.0 (2025-03-09)
 
 
