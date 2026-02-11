@@ -2,7 +2,7 @@ services:
 
   techdocs-runner-builder:
     container_name: techdocs-runner-builder
-    image: webgrip/techdocs-builder:latest
+    image: webgrip/techdocs-builder:latest@sha256:3c33b23bdb7188de8ff9ed55b7181db3141200c5615547944154e2eadfac9b56
     pull_policy: always
 
   techdocs-runner:
